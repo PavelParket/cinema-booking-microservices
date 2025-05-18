@@ -1,0 +1,21 @@
+# Application name (used in Eureka)
+spring:
+  application:
+    name: auth-service
+
+  # Database connection settings
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_admin_panel
+    username: postgres
+    password: 10_ghbdtn_7
+    driver-class-name: org.postgresql.Driver
+
+  # JPA / Hibernate settings
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# Port on which the User Service will run
+server:
+  port: 8081
