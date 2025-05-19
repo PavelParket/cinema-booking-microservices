@@ -1,7 +1,10 @@
 # Application name (used in Eureka)
 spring:
   application:
-    name: UserService
+    name: user-service
+  cloud:
+    discovery:
+      enabled: true
 
   # Database connection settings
   datasource:
@@ -16,6 +19,14 @@ spring:
       ddl-auto: update
     show-sql: true
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
 # Port on which the User Service will run
 server:
-  port: 8080
+  port: 0

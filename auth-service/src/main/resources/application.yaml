@@ -2,6 +2,9 @@
 spring:
   application:
     name: auth-service
+  cloud:
+    discovery:
+      enabled: true
 
   # Database connection settings
   datasource:
@@ -16,6 +19,19 @@ spring:
       ddl-auto: update
     show-sql: true
 
-# Port on which the User Service will run
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+# Port on which the Auth Service will run
 server:
-  port: 8081
+  port: 0
+
+app:
+  jwt:
+    secret: iubib3247niu@$*Iaigernie34rn#%UQnfoea7564ignr
+    expiration: 60000

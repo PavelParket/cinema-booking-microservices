@@ -6,6 +6,10 @@ spring:
   # === Gateway discovery settings ===
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
         # Auth Service Routes (for future use)
         - id: auth-service
@@ -41,11 +45,13 @@ spring:
 # === Eureka client settings ===
 eureka:
   client:
-    enabled: false
-    register-with-eureka: false
-    fetch-registry: false
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
 
 # Port on which the API Gateway will run
 server:
@@ -56,8 +62,3 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     org.springframework.security: DEBUG
-
-app:
-  jwt:
-    secret: iubib3247niu@$*Iaigernie34rn#%UQnfoea7564ignr
-    expiration: 60000
