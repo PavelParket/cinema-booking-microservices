@@ -55,4 +55,7 @@ public class AuthController {
     public ResponseEntity<UserResponse> getByEmail(@PathVariable String email) {
         return ResponseEntity.ok(service.getByEmail(email));
     }
+
+    /*@PostMapping("/login")
+    public*/
 }

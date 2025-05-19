@@ -6,25 +6,30 @@ spring:
   # === Gateway discovery settings ===
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: false
       routes:
-        # User Service Routes
-        - id: user-service
-          uri: http://localhost:8081  # Assuming your user service runs on port 8081
-          predicates:
-            - Path=/api/users/**
-          filters:
-            - StripPrefix=1
-
         # Auth Service Routes (for future use)
         - id: auth-service
-          uri: http://localhost:8082  # Assuming your auth service will run on port 8082
+          uri: lb://auth-service
           predicates:
             - Path=/api/auth/**
           filters:
             - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: authServiceCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+
+        # User Service Routes
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: userServiceCircuitBreaker
+                fallbackUri: forward:/fallback/user
 
   # === Security (JWT) settings ===
   security:
@@ -51,3 +56,8 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     org.springframework.security: DEBUG
+
+app:
+  jwt:
+    secret: iubib3247niu@$*Iaigernie34rn#%UQnfoea7564ignr
+    expiration: 60000
