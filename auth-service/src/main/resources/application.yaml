@@ -30,3 +30,8 @@ eureka:
 # Port on which the Auth Service will run
 server:
   port: 0
+
+app:
+  jwt:
+    secret: iubib3247niu@$*Iaigernie34rn#%UQnfoea7564ignr
+    expiration: 60000
