@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: movie-service
+  cloud:
+    discovery:
+      enabled: true
+
+  # Database connection settings
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_admin_panel
+    username: postgres
+    password: 10_ghbdtn_7
+    driver-class-name: org.postgresql.Driver
+
+  # JPA / Hibernate settings
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+server:
+  port: 0
