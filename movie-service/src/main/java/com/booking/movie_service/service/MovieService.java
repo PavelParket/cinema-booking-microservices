@@ -31,18 +31,14 @@ public class MovieService {
         return mapper.toResponse(savedMovie);
     }
 
-    // TODO
     @Transactional
     public MovieResponse update(Long id, MovieRequest request) {
-        Movie existingMovie = repository.findById(id)
+        Movie movie = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + id));
 
-        Movie movieToUpdate = mapper.toEntity(request, resolver);
-        movieToUpdate.setId(existingMovie.getId());
+        mapper.updateEntityFromRequest(request, movie, resolver);
 
-        Movie updatedMovie = repository.save(movieToUpdate);
-
-        return mapper.toResponse(updatedMovie);
+        return mapper.toResponse(repository.save(movie));
     }
 
     @Transactional

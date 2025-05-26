@@ -5,10 +5,13 @@ import com.booking.movie_service.dto.MovieResponse;
 import com.booking.movie_service.entity.Genre;
 import com.booking.movie_service.entity.Movie;
 import com.booking.movie_service.resolver.GenreResolver;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +27,11 @@ public interface MovieMapper {
     MovieResponse toResponse(Movie movie);
 
     List<MovieResponse> toResponseList(List<Movie> movies);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "genres", source = "genreIds", qualifiedByName = "mapGenreIdsToGenres")
+    void updateEntityFromRequest(MovieRequest movieRequest, @MappingTarget Movie movie, @Context GenreResolver genreResolver);
 
     @Named("mapGenreIdsToGenres")
     default Set<Genre> mapGenreIdsToGenres(List<Long> ids, @Context GenreResolver genreResolver) {

@@ -11,53 +11,48 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GenreService {
 
-    private final GenreRepository genreRepository;
-    private final GenreMapper genreMapper;
+    private final GenreRepository repository;
 
-    @Transactional(readOnly = true)
-    public List<GenreResponse> getAllGenres() {
-        return genreRepository.findAll().stream()
-                .map(genreMapper::toResponse)
-                .collect(Collectors.toList());
-    }
+    private final GenreMapper mapper;
 
-    @Transactional(readOnly = true)
-    public GenreResponse getGenreById(Long id) {
-        return genreRepository.findById(id)
-                .map(genreMapper::toResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Genre not found with id: " + id));
+    @Transactional
+    public GenreResponse create(GenreRequest request) {
+        Genre genre = mapper.toEntity(request);
+        Genre savedGenre = repository.save(genre);
+        return mapper.toResponse(savedGenre);
     }
 
     @Transactional
-    public GenreResponse createGenre(GenreRequest request) {
-        Genre genre = genreMapper.toEntity(request);
-        Genre savedGenre = genreRepository.save(genre);
-        return genreMapper.toResponse(savedGenre);
-    }
-
-    @Transactional
-    public GenreResponse updateGenre(Long id, GenreRequest request) {
-        Genre existingGenre = genreRepository.findById(id)
+    public GenreResponse update(Long id, GenreRequest request) {
+        Genre genre = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Genre not found with id: " + id));
 
-        Genre genreToUpdate = genreMapper.toEntity(request);
-        genreToUpdate.setId(existingGenre.getId());
-        
-        Genre updatedGenre = genreRepository.save(genreToUpdate);
-        return genreMapper.toResponse(updatedGenre);
+        mapper.updateEntityFromRequest(request, genre);
+
+        return mapper.toResponse(repository.save(genre));
     }
 
     @Transactional
-    public void deleteGenre(Long id) {
-        if (!genreRepository.existsById(id)) {
+    public void delete(Long id) {
+        if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Genre not found with id: " + id);
         }
-        genreRepository.deleteById(id);
+
+        repository.deleteById(id);
     }
-} 
+
+    public List<GenreResponse> getAll() {
+        return mapper.toResponseList(repository.findAll());
+    }
+
+    public GenreResponse getById(Long id) {
+        return repository.findById(id)
+                .map(mapper::toResponse)
+                .orElseThrow(() -> new EntityNotFoundException("Genre not found with id: " + id));
+    }
+}
