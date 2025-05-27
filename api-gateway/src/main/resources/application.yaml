@@ -11,7 +11,7 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        # Auth Service Routes (for future use)
+        # Auth Service Routes
         - id: auth-service
           uri: lb://auth-service
           predicates:
@@ -34,6 +34,18 @@ spring:
               args:
                 name: userServiceCircuitBreaker
                 fallbackUri: forward:/fallback/user
+
+        # Movie Service Routes
+        - id: movie-service
+          uri: lb://movie-service
+          predicates:
+            - Path=/api/movies/**,/api/genres/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: movieServiceCircuitBreaker
+                fallbackUri: forward:/fallback/movie
 
   # === Security (JWT) settings ===
   security:

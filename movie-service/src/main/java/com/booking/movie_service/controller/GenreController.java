@@ -29,6 +29,11 @@ public class GenreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<List<GenreResponse>> createList(@RequestBody List<GenreRequest> requestList) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createList(requestList));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<GenreResponse> update(@PathVariable Long id, @RequestBody GenreRequest request) {
         return ResponseEntity.ok(service.update(id, request));

@@ -49,10 +49,7 @@ public class Movie {
     private Integer ageRating;
 
     @ManyToMany
-    @JoinTable(
-            name = "movie_genres",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
+    @JoinTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @Builder.Default
     private Set<Genre> genres = new HashSet<>();
 }

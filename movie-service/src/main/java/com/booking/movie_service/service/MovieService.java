@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -58,5 +59,29 @@ public class MovieService {
         return repository.findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + id));
+    }
+
+    public List<MovieResponse> findByTitle(String title) {
+        return mapper.toResponseList(repository.findByTitle(title));
+    }
+
+    public List<MovieResponse> findByDirector(String director) {
+        return mapper.toResponseList(repository.findByDirector(director));
+    }
+
+    public List<MovieResponse> findByCountry(String country) {
+        return mapper.toResponseList(repository.findByCountry(country));
+    }
+
+    public List<MovieResponse> findByRelease(LocalDate date) {
+        return mapper.toResponseList(repository.findByRelease(date));
+    }
+
+    public List<MovieResponse> findByReleaseBetween(LocalDate from, LocalDate to) {
+        return mapper.toResponseList(repository.findByReleaseBetween(from, to));
+    }
+
+    public List<MovieResponse> findByGenreIds(List<Long> genreIds) {
+        return mapper.toResponseList(repository.findByGenresIdIn(genreIds));
     }
 }

@@ -1,7 +1,9 @@
-CREATE TABLE IF NOT EXISTS movie_genre (
+CREATE SEQUENCE IF NOT EXISTS movie_genres_id_seq;
+
+CREATE TABLE IF NOT EXISTS movie_genres (
+   id BIGINT PRIMARY KEY DEFAULT nextval('movie_genres_id_seq'),
    movie_id BIGINT NOT NULL,
    genre_id BIGINT NOT NULL,
-   PRIMARY KEY (movie_id, genre_id),
-   FOREIGN KEY (movie_id) REFERENCES movie(id) ON DELETE CASCADE,
-   FOREIGN KEY (genre_id) REFERENCES genre(id) ON DELETE CASCADE
+   FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
+   FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
 );

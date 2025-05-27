@@ -15,6 +15,8 @@ public interface GenreMapper {
     @Mapping(target = "id", ignore = true)
     Genre toEntity(GenreRequest genreRequest);
 
+    List<Genre> toEntityList(List<GenreRequest> requestList);
+
     GenreResponse toResponse(Genre genre);
 
     List<GenreResponse> toResponseList(List<Genre> genres);

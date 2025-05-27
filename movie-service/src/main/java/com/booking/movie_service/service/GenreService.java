@@ -28,6 +28,16 @@ public class GenreService {
     }
 
     @Transactional
+    public List<GenreResponse> createList(List<GenreRequest> requestList) {
+        List<Genre> list = requestList.stream()
+                .map(mapper::toEntity)
+                .map(repository::save)
+                .toList();
+
+        return mapper.toResponseList(list);
+    }
+
+    @Transactional
     public GenreResponse update(Long id, GenreRequest request) {
         Genre genre = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Genre not found with id: " + id));
