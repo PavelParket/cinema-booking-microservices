@@ -40,10 +40,10 @@ public class Screening {
     private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private Duration duration;
+    private Integer duration;
 
     @Column(nullable = false)
-    private String hall;
+    private Integer hall;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal basePrice;

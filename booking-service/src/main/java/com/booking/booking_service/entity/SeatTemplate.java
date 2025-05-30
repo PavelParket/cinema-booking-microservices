@@ -1,16 +1,13 @@
 package com.booking.booking_service.entity;
 
-import com.booking.booking_service.util.BookingStatus;
+import com.booking.booking_service.util.SeatType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,37 +15,35 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "seat_templates")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Booking {
+public class SeatTemplate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screening_id", nullable = false)
-    private Screening screening;
+    private String seatNumber;
 
     @Column(nullable = false)
-    private Integer seatNumber;
+    private Integer row;
+
+    @Column(nullable = false)
+    private boolean available;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BookingStatus status;
+    private SeatType seatType;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private BigDecimal priceMultiplier;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(nullable = false)
+    private Integer scheme;
 }

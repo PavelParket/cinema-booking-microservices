@@ -10,8 +10,8 @@ CREATE TABLE screenings (
    id BIGSERIAL PRIMARY KEY,
    movie_id BIGINT NOT NULL,
    start_time TIMESTAMP NOT NULL,
-   duration INTERVAL NOT NULL,
-   hall VARCHAR(255) NOT NULL,
+   duration INTEGER NOT NULL,
+   hall INTEGER NOT NULL,
    base_price DECIMAL(10, 2) NOT NULL,
    status screening_status NOT NULL
 );
