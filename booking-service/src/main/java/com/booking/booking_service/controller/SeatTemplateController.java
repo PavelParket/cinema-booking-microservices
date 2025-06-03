@@ -1,8 +1,8 @@
-package com.booking.auth_service.controller;
+package com.booking.booking_service.controller;
 
-import com.booking.auth_service.dto.UserRequest;
-import com.booking.auth_service.dto.UserResponse;
-import com.booking.auth_service.service.AuthService;
+import com.booking.booking_service.dto.SeatTemplateRequest;
+import com.booking.booking_service.dto.SeatTemplateResponse;
+import com.booking.booking_service.service.SeatTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/seat-templates")
 @RequiredArgsConstructor
-public class AuthController {
+public class SeatTemplateController {
 
-    private final AuthService service;
+    private final SeatTemplateService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
+    @PostMapping
+    public ResponseEntity<SeatTemplateResponse> create(@RequestBody SeatTemplateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest request) {
+    public ResponseEntity<SeatTemplateResponse> update(@PathVariable Long id, @RequestBody SeatTemplateRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 
@@ -42,27 +42,17 @@ public class AuthController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAll() {
+    public ResponseEntity<List<SeatTemplateResponse>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<SeatTemplateResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponse> getByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(service.getByEmail(email));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody UserRequest request) {
-        return ResponseEntity.ok(service.login(request));
-    }
-
-    @GetMapping("/check")
-    public ResponseEntity<Boolean> check(String token) {
-        return ResponseEntity.ok(service.check(token));
+    @GetMapping("/scheme/{scheme}")
+    public ResponseEntity<List<SeatTemplateResponse>> getByScheme(@PathVariable Integer scheme) {
+        return ResponseEntity.ok(service.getByScheme(scheme));
     }
 }

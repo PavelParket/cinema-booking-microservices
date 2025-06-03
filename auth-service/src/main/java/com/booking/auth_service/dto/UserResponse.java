@@ -23,4 +23,8 @@ public class UserResponse {
     private LocalDateTime createdAt;
 
     private Role role;
+
+    private String accessToken;
+
+    private String refreshToken;
 }

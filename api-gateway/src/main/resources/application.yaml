@@ -47,6 +47,18 @@ spring:
                 name: movieServiceCircuitBreaker
                 fallbackUri: forward:/fallback/movie
 
+        # Booking Service Routes
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/api/bookings/**,/api/screenings/**,/api/seats/**,/api/seat-templates/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: movieServiceCircuitBreaker
+                fallbackUri: forward:/fallback/booking
+
   # === Security (JWT) settings ===
   security:
     oauth2:
@@ -72,5 +84,6 @@ server:
 # Logging configuration
 logging:
   level:
+    org.springframework.web: DEBUG
     org.springframework.cloud.gateway: DEBUG
     org.springframework.security: DEBUG

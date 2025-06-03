@@ -1,7 +1,6 @@
-# Application name (used in Eureka)
 spring:
   application:
-    name: auth-service
+    name: booking-service
   cloud:
     discovery:
       enabled: true
@@ -27,18 +26,5 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.int}
 
-# Port on which the Auth Service will run
 server:
   port: 0
-
-app:
-  jwt:
-    secret: iubib3247niuIaigernie34rnUQnfoea7564ignr290pevjoi45hj54iegip5j489whj64893j09q3jv0wrj290hj94jgvi4j392jg4i
-    expiration: 60000
-
-# Logging configuration
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.springframework.cloud.gateway: DEBUG
-    org.springframework.security: DEBUG

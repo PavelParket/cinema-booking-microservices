@@ -1,36 +1,38 @@
-package com.booking.auth_service.controller;
+package com.booking.booking_service.controller;
 
-import com.booking.auth_service.dto.UserRequest;
-import com.booking.auth_service.dto.UserResponse;
-import com.booking.auth_service.service.AuthService;
+import com.booking.booking_service.dto.ScreeningRequest;
+import com.booking.booking_service.dto.ScreeningResponse;
+import com.booking.booking_service.service.ScreeningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/screenings")
 @RequiredArgsConstructor
-public class AuthController {
+public class ScreeningController {
 
-    private final AuthService service;
+    private final ScreeningService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
+    @PostMapping
+    public ResponseEntity<ScreeningResponse> create(@RequestBody ScreeningRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest request) {
+    public ResponseEntity<ScreeningResponse> update(@PathVariable Long id, @RequestBody ScreeningRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 
@@ -42,27 +44,19 @@ public class AuthController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAll() {
+    public ResponseEntity<List<ScreeningResponse>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<ScreeningResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponse> getByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(service.getByEmail(email));
-    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestParam String status) {
+        service.updateStatus(id, status);
 
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody UserRequest request) {
-        return ResponseEntity.ok(service.login(request));
-    }
-
-    @GetMapping("/check")
-    public ResponseEntity<Boolean> check(String token) {
-        return ResponseEntity.ok(service.check(token));
+        return ResponseEntity.noContent().build();
     }
 }

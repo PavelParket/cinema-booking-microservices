@@ -17,6 +17,8 @@ public interface UserMapper {
     @Mapping(target = "role", ignore = true)
     User toEntity(UserRequest request);
 
+    @Mapping(target = "accessToken", ignore = true)
+    @Mapping(target = "refreshToken", ignore = true)
     UserResponse toResponse(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -24,4 +26,13 @@ public interface UserMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "role", ignore = true)
     void updateUserEntity(UserRequest request, @MappingTarget User user);
+
+    default UserResponse toResponse(User user, String accessToken, String refreshToken) {
+        UserResponse userResponse = toResponse(user);
+
+        userResponse.setAccessToken(accessToken);
+        userResponse.setRefreshToken(refreshToken);
+
+        return userResponse;
+    }
 }
