@@ -18,10 +18,6 @@ spring:
             - Path=/api/auth/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: authServiceCircuitBreaker
-                fallbackUri: forward:/fallback/auth
 
         # User Service Routes
         - id: user-service
@@ -30,10 +26,6 @@ spring:
             - Path=/api/users/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: userServiceCircuitBreaker
-                fallbackUri: forward:/fallback/user
 
         # Movie Service Routes
         - id: movie-service
@@ -42,10 +34,6 @@ spring:
             - Path=/api/movies/**,/api/genres/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: movieServiceCircuitBreaker
-                fallbackUri: forward:/fallback/movie
 
         # Booking Service Routes
         - id: booking-service
@@ -54,17 +42,6 @@ spring:
             - Path=/api/bookings/**,/api/screenings/**,/api/seats/**,/api/seat-templates/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: movieServiceCircuitBreaker
-                fallbackUri: forward:/fallback/booking
-
-  # === Security (JWT) settings ===
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:9000/.well-known/jwks.json
 
 # === Eureka client settings ===
 eureka:
@@ -80,6 +57,11 @@ eureka:
 # Port on which the API Gateway will run
 server:
   port: 8888
+
+app:
+  jwt:
+    secret: iubib3247niuIaigernie34rnUQnfoea7564ignr290pevjoi45hj54iegip5j489whj64893j09q3jv0wrj290hj94jgvi4j392jg4i
+    expiration: 60000
 
 # Logging configuration
 logging:

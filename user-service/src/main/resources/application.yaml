@@ -29,4 +29,10 @@ eureka:
 
 # Port on which the User Service will run
 server:
-  port: 0
+  port: 8081
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
