@@ -58,7 +58,7 @@ public class SeatService {
     }
 
     @Transactional
-    public void updateStatus(Long id, String type) {
+    public void updateType(Long id, String type) {
         Seat seat = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Screening not found with id: " + id));
 
