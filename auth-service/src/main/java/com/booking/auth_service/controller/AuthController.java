@@ -24,7 +24,7 @@ public class AuthController {
 
     private final AuthService service;
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
@@ -56,6 +56,13 @@ public class AuthController {
         return ResponseEntity.ok(service.getByEmail(email));
     }
 
-    /*@PostMapping("/login")
-    public*/
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> login(@RequestBody UserRequest request) {
+        return ResponseEntity.ok(service.login(request));
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> check(String token) {
+        return ResponseEntity.ok(service.check(token));
+    }
 }

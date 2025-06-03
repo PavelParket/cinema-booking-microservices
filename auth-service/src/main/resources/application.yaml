@@ -25,7 +25,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
-    instance-id: ${spring.application.name}:${random.value}
+    instance-id: ${spring.application.name}:${random.int}
 
 # Port on which the Auth Service will run
 server:
@@ -33,5 +33,12 @@ server:
 
 app:
   jwt:
-    secret: iubib3247niu@$*Iaigernie34rn#%UQnfoea7564ignr
+    secret: iubib3247niuIaigernie34rnUQnfoea7564ignr290pevjoi45hj54iegip5j489whj64893j09q3jv0wrj290hj94jgvi4j392jg4i
     expiration: 60000
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
