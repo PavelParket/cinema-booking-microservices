@@ -6,7 +6,7 @@ CREATE TYPE seat_type AS ENUM (
 -- Create seats table
 CREATE TABLE seats (
    id BIGSERIAL PRIMARY KEY,
-   seat_number INTEGER NOT NULL,
+   seat_number VARCHAR(10) NOT NULL,
    row INTEGER NOT NULL,
    available BOOLEAN NOT NULL,
    seat_type seat_type NOT NULL,
