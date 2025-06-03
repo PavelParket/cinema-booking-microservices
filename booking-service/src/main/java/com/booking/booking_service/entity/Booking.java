@@ -40,7 +40,7 @@ public class Booking {
     private Screening screening;
 
     @Column(nullable = false)
-    private Integer seatNumber;
+    private String seatNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

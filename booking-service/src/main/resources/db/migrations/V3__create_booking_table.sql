@@ -9,7 +9,7 @@ CREATE TABLE bookings (
    id BIGSERIAL PRIMARY KEY,
    user_id BIGINT NOT NULL,
    screening_id BIGINT NOT NULL,
-   seat_number INTEGER NOT NULL,
+   seat_number VARCHAR(10) NOT NULL,
    status booking_status NOT NULL,
    created_at TIMESTAMP NOT NULL,
    price DECIMAL(10, 2) NOT NULL,

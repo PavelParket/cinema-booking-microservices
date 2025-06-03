@@ -18,7 +18,11 @@ public class ScreeningRequest {
 
     private LocalDateTime startTime;
 
+    private Integer duration;
+
     private Integer hall;
 
     private BigDecimal basePrice;
+
+    private Integer scheme;
 }

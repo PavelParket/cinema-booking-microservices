@@ -5,6 +5,7 @@ import com.booking.booking_service.dto.SeatResponse;
 import com.booking.booking_service.entity.Seat;
 import com.booking.booking_service.mapper.SeatMapper;
 import com.booking.booking_service.repository.SeatRepository;
+import com.booking.booking_service.util.SeatType;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,22 @@ public class SeatService {
         return repository.findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Seat not found with id: " + id));
+    }
+
+    @Transactional
+    public void updateStatus(Long id, String type) {
+        Seat seat = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Screening not found with id: " + id));
+
+        SeatType enumType;
+
+        try {
+            enumType = SeatType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid type value: " + type);
+        }
+
+        seat.setSeatType(enumType);
+        repository.save(seat);
     }
 }
