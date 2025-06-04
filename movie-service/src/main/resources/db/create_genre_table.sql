@@ -1,0 +1,6 @@
+CREATE SEQUENCE IF NOT EXISTS genres_id_seq;
+
+CREATE TABLE IF NOT EXISTS genres (
+   id BIGINT PRIMARY KEY DEFAULT nextval('genres_id_seq'),
+   name VARCHAR(255) NOT NULL UNIQUE
+);

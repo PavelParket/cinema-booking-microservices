@@ -1,0 +1,71 @@
+# Application name (used in Eureka)
+spring:
+  application:
+    name: api-gateway
+
+  # === Gateway discovery settings ===
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # Auth Service Routes
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
+
+        # User Service Routes
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+
+        # Movie Service Routes
+        - id: movie-service
+          uri: lb://movie-service
+          predicates:
+            - Path=/api/movies/**,/api/genres/**
+          filters:
+            - StripPrefix=1
+
+        # Booking Service Routes
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/api/bookings/**,/api/screenings/**,/api/seats/**,/api/seat-templates/**
+          filters:
+            - StripPrefix=1
+
+# === Eureka client settings ===
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Port on which the API Gateway will run
+server:
+  port: 8888
+
+app:
+  jwt:
+    secret: iubib3247niuIaigernie34rnUQnfoea7564ignr290pevjoi45hj54iegip5j489whj64893j09q3jv0wrj290hj94jgvi4j392jg4i
+    expiration: 60000
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG

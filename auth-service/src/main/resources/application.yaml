@@ -1,0 +1,44 @@
+# Application name (used in Eureka)
+spring:
+  application:
+    name: auth-service
+  cloud:
+    discovery:
+      enabled: true
+
+  # Database connection settings
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_admin_panel
+    username: postgres
+    password: 10_ghbdtn_7
+    driver-class-name: org.postgresql.Driver
+
+  # JPA / Hibernate settings
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.int}
+
+# Port on which the Auth Service will run
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: iubib3247niuIaigernie34rnUQnfoea7564ignr290pevjoi45hj54iegip5j489whj64893j09q3jv0wrj290hj94jgvi4j392jg4i
+    expiration: 60000
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
