@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse update(UUID id, UserRequest request) {
+    public UserResponse update(Long id, UserRequest request) {
         User user = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("User id=" + id + " not found"));
 
         mapper.updateUserEntity(request, user);
@@ -38,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new EntityNotFoundException("User id=" + id + " not found");
         }
@@ -50,7 +49,7 @@ public class UserService {
         return mapper.toListResponse(repository.findAll());
     }
 
-    public UserResponse getById(UUID id) {
+    public UserResponse getById(Long id) {
         return mapper.toResponse(repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User id=" + id + " not found")));
     }

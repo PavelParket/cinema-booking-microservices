@@ -2,6 +2,7 @@ package com.booking.auth_service.controller;
 
 import com.booking.auth_service.dto.UserRequest;
 import com.booking.auth_service.dto.UserResponse;
+import com.booking.auth_service.exception.UserException;
 import com.booking.auth_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,53 +17,62 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService service;
+   private final AuthService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
-    }
+   @PostMapping("/register")
+   public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
+      return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+   }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest request) {
-        return ResponseEntity.ok(service.update(id, request));
-    }
+   @PutMapping("/{id}")
+   public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest request) {
+      return ResponseEntity.ok(service.update(id, request));
+   }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+   @DeleteMapping("/{id}")
+   public ResponseEntity<Void> delete(@PathVariable Long id) {
+      service.delete(id);
 
-        return ResponseEntity.noContent().build();
-    }
+      return ResponseEntity.noContent().build();
+   }
 
-    @GetMapping
-    public ResponseEntity<List<UserResponse>> getAll() {
-        return ResponseEntity.ok(service.getAll());
-    }
+   @GetMapping
+   public ResponseEntity<List<UserResponse>> getAll() {
+      return ResponseEntity.ok(service.getAll());
+   }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
-    }
+   @GetMapping("/{id}")
+   public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+      return ResponseEntity.ok(service.getById(id));
+   }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponse> getByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(service.getByEmail(email));
-    }
+   @GetMapping("/email/{email}")
+   public ResponseEntity<UserResponse> getByEmail(@PathVariable String email) {
+      return ResponseEntity.ok(service.getByEmail(email));
+   }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody UserRequest request) {
-        return ResponseEntity.ok(service.login(request));
-    }
+   @PostMapping("/login")
+   public ResponseEntity<UserResponse> login(@RequestBody UserRequest request) {
+      return ResponseEntity.ok(service.login(request));
+   }
 
-    @GetMapping("/check")
-    public ResponseEntity<Boolean> check(String token) {
-        return ResponseEntity.ok(service.check(token));
-    }
+   @GetMapping("/check")
+   public ResponseEntity<Boolean> check(String token) {
+      return ResponseEntity.ok(service.check(token));
+   }
+
+   @PostMapping("/refresh")
+   public ResponseEntity<UserResponse> refresh(@RequestBody String request) {
+      if (request == null || request.isEmpty()) {
+         throw new UserException("Refresh token is required");
+      }
+      return ResponseEntity.ok(service.refreshToken(request));
+   }
 }

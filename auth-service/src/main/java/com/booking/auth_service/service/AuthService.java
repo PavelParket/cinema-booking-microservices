@@ -1,5 +1,6 @@
 package com.booking.auth_service.service;
 
+import com.booking.auth_service.dto.TokenPair;
 import com.booking.auth_service.dto.UserRequest;
 import com.booking.auth_service.dto.UserResponse;
 import com.booking.auth_service.entity.User;
@@ -7,6 +8,7 @@ import com.booking.auth_service.exception.UserException;
 import com.booking.auth_service.mapper.UserMapper;
 import com.booking.auth_service.repository.AuthRepository;
 import com.booking.auth_service.util.Role;
+import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -45,8 +47,7 @@ public class AuthService {
 
         Map<String, Object> external = Map.of(
                 "username", user.getUsername(),
-                "email", user.getEmail()
-        );
+                "email", user.getEmail());
 
         try {
             String technicalToken = tokenService.generateAccessToken("auth-service", "SERVICE");
@@ -57,11 +58,8 @@ public class AuthService {
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(external)
                     .retrieve()
-                    .onStatus(HttpStatusCode::isError, clientResponse ->
-                            clientResponse.bodyToMono(String.class)
-                                    .flatMap(errorBody ->
-                                            Mono.error(new RuntimeException("External service error: " + errorBody)))
-                    )
+                    .onStatus(HttpStatusCode::isError, clientResponse -> clientResponse.bodyToMono(String.class)
+                            .flatMap(errorBody -> Mono.error(new RuntimeException("External service error: " + errorBody))))
                     .bodyToMono(Object.class)
                     .block();
 
@@ -98,8 +96,7 @@ public class AuthService {
 
         Map<String, Object> external = Map.of(
                 "username", updatedUser.getUsername(),
-                "email", updatedUser.getEmail()
-        );
+                "email", updatedUser.getEmail());
 
         try {
             Object response = webClient.put()
@@ -107,11 +104,8 @@ public class AuthService {
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(external)
                     .retrieve()
-                    .onStatus(HttpStatusCode::isError, clientResponse ->
-                            clientResponse.bodyToMono(String.class)
-                                    .flatMap(errorBody ->
-                                            Mono.error(new RuntimeException("External update error: " + errorBody)))
-                    )
+                    .onStatus(HttpStatusCode::isError, clientResponse -> clientResponse.bodyToMono(String.class)
+                            .flatMap(errorBody -> Mono.error(new RuntimeException("External update error: " + errorBody))))
                     .bodyToMono(Object.class)
                     .block();
 
@@ -138,11 +132,8 @@ public class AuthService {
             webClient.delete()
                     .uri("http://user-service/users/{id}", id)
                     .retrieve()
-                    .onStatus(HttpStatusCode::isError, clientResponse ->
-                            clientResponse.bodyToMono(String.class)
-                                    .flatMap(errorBody ->
-                                            Mono.error(new RuntimeException("External delete error: " + errorBody)))
-                    )
+                    .onStatus(HttpStatusCode::isError, clientResponse -> clientResponse.bodyToMono(String.class)
+                            .flatMap(errorBody -> Mono.error(new RuntimeException("External delete error: " + errorBody))))
                     .toBodilessEntity()
                     .block();
 
@@ -193,5 +184,17 @@ public class AuthService {
 
     public Boolean check(String token) {
         return tokenService.validateToken(token);
+    }
+
+    public UserResponse refreshToken(String refreshToken) {
+        TokenPair tokens = tokenService.refreshTokens(refreshToken);
+
+        Claims claims = tokenService.extractClaims(refreshToken);
+        String username = claims.getSubject();
+
+        User user = repository.findByEmail(username)
+                .orElseThrow(() -> new UserException("User not found"));
+
+        return mapper.toResponse(user, tokens.accessToken(), tokens.refreshToken());
     }
 }

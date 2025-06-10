@@ -50,3 +50,6 @@ docker-compose.override.yml
 # Общее
 *.DS_Store
 Thumbs.db
+
+# Cursor
+.cursor/

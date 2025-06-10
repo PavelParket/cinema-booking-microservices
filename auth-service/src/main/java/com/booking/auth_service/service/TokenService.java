@@ -1,5 +1,6 @@
 package com.booking.auth_service.service;
 
+import com.booking.auth_service.dto.TokenPair;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -8,8 +9,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -92,5 +91,34 @@ public class TokenService {
     public void cleanupExpiredTokens() {
         Date now = new Date();
         blacklistedTokens.entrySet().removeIf(entry -> entry.getValue().before(now));
+    }
+
+    public Claims extractClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException e) {
+            throw new RuntimeException("Invalid token", e);
+        }
+    }
+
+    public TokenPair refreshTokens(String refreshToken) {
+        if (!validateToken(refreshToken)) {
+            throw new RuntimeException("Invalid refresh token");
+        }
+
+        Claims claims = extractClaims(refreshToken);
+        String username = claims.getSubject();
+        String role = claims.get("role", String.class);
+
+        String newAccessToken = generateAccessToken(username, role);
+        String newRefreshToken = generateRefreshToken(username, role);
+
+        blacklistToken(refreshToken);
+
+        return new TokenPair(newAccessToken, newRefreshToken);
     }
 }
